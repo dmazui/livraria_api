@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,16 +19,15 @@ import com.dimaz.livrariaapi.domain.dtos.LivroDTO;
 import com.dimaz.livrariaapi.services.LivroService;
 
 @RestController
-@RequestMapping("v1/livros")
+@RequestMapping("/v1/livros")
 public class LivroController {
 
 	@Autowired
 	LivroService service;
 	
-	//crud
 	//cria
 	@PostMapping
-	public ResponseEntity<LivroDTO> save(@Valid LivroDTO livroDto) throws Exception {
+	public ResponseEntity<LivroDTO> save(@RequestBody LivroDTO livroDto) throws Exception {
 		try {
 			livroDto = service.save(livroDto);
 			return ResponseEntity.ok(livroDto);
@@ -43,8 +43,8 @@ public class LivroController {
 	
 //	deleta
 	@DeleteMapping("{id}")
-	public ResponseEntity<LivroDTO> delete(@PathVariable("id") Long id) throws Exception {
-		return (service.findById(id) != null) ? ResponseEntity.ok(service.delete(id)) : ResponseEntity.notFound().build();
+	public ResponseEntity<String> delete(@PathVariable("id") Long id) throws Exception {
+		return (service.findById(id) != null) ? ResponseEntity.ok(service.delete(id).toString()) : ResponseEntity.notFound().build();
 	}
 	
 	//buscas
